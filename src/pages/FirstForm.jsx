@@ -10,8 +10,8 @@ export default function FirstForm() {
         cell: '',
         genere: '',
         professione:'',
-        //interessi:formData.interessi,
-        //immagine: formData.immagine 
+        interessi:[],
+        //immagine: '' 
     })
 
     const [card, setCard] = useState([])
@@ -30,9 +30,22 @@ export default function FirstForm() {
         setProfession(e.target.value)
     }
 
+    //estazione valore checkbox
+    const [interests, setInterests] = useState([])
+
+    const handleInterestsChange = (e) =>{
+        const {value} = e.target
+        if (interests.includes(value)) {
+            setInterests(interests.filter((interest) => interest !== value));
+          } else {
+            setInterests([...interests, value]);
+          }
+        //setInterests([...interests, value])
+    }
+
     const handleInputChange = (e) => {
         const { name, type, value, checked } = e.target
-        const inputValue = type == 'radio' ? checked : value
+        const inputValue = type == 'checkbox' ? checked : value
         setFormData({
             ...formData,
             [name]: inputValue
@@ -50,7 +63,7 @@ export default function FirstForm() {
             cell: formData.cell,
             genere: gender,
             professione: profession,
-            //interessi:formData.interessi,
+            interessi:interests,
             //immagine: formData.immagine
         }
 
@@ -68,19 +81,19 @@ export default function FirstForm() {
                     <form className="p-4 w-[20%]" onSubmit={handleSubmit}>
                         <div className="flex justify-between mb-2">
                             <label className="text-white" htmlFor="nome">Nome</label>
-                            <input className="basis-2/3" type="text" name="nome" value={formData.nome} onChange={handleInputChange} />
+                            <input className="basis-2/3 rounded-md" type="text" name="nome" value={formData.nome} onChange={handleInputChange} />
                         </div>
                         <div className="flex justify-between mb-2">
                             <label className="text-white" htmlFor="cognome">Cognome</label>
-                            <input className="basis-2/3" type="text" name="cognome" value={formData.cognome} onChange={handleInputChange} />
+                            <input className="basis-2/3 rounded-md" type="text" name="cognome" value={formData.cognome} onChange={handleInputChange} />
                         </div>
                         <div className="flex justify-between mb-2">
                             <label className="text-white" htmlFor="email">Email</label>
-                            <input className="basis-2/3" type="email" name="email" value={formData.email} onChange={handleInputChange} />
+                            <input className="basis-2/3 rounded-md" type="email" name="email" value={formData.email} onChange={handleInputChange} />
                         </div>
                         <div className="flex justify-between mb-2">
                             <label className="text-white" htmlFor="cell">Cellulare</label>
-                            <input className="basis-2/3" type="number" name="cell" value={formData.cell} onChange={handleInputChange} />
+                            <input className="basis-2/3 rounded-md" type="number" name="cell" value={formData.cell} onChange={handleInputChange} />
                         </div>
                         <div className="flex justify-between mb-2 text-white">Sesso
                             <div className="basis-1/4">
@@ -94,7 +107,7 @@ export default function FirstForm() {
                         </div>
                     <div className="flex justify-between mb-2">
                         <label className="text-white" htmlFor="professione">Professione</label>
-                        <select className="basis-2/3" name="professione" id="professione" value={profession} onChange={handleProfessionChange}>
+                        <select className="basis-2/3 rounded-md" name="professione" id="professione" value={profession} onChange={handleProfessionChange}>
                             <option  value=""></option>
                             <option  value="full-stack">Full-stack</option>
                             <option  value="front-end">Front-end</option>
@@ -104,12 +117,12 @@ export default function FirstForm() {
                     <div className="flex justify-between mb-2 text-white">
                         <span>Interessi</span>
                         <div className="basis-1/4">
-                            <input name="interessi" type="checkbox" checked={[formData.interessi]}/>
-                            <label htmlFor="interessi">Viaggi</label>
+                            <input name="interesseUno" type="checkbox" value="viaggi" checked={interests.includes('viaggi')} onChange={handleInterestsChange}/>
+                            <label htmlFor="interesseUno">Viaggi</label>
                         </div>
                         <div>
-                            <input name="interessi" type="checkbox" checked={[formData.interessi]}/>
-                            <label htmlFor="interessi">Romanzi</label>
+                            <input name="interesseDue" type="checkbox" value="romanzi" checked={interests.includes('romanzi')} onChange={handleInterestsChange}/>
+                            <label htmlFor="interesseDue">Romanzi</label>
                         </div>
                     </div>
                     {/* <div className="flex justify-between mb-2 text-white">
@@ -117,7 +130,7 @@ export default function FirstForm() {
                         <input className="basis-2/3" name="immagine" type="file" />
                     </div>*/}
                         <div className="flex w-full">
-                            <button className="p-2 bg-sky-500 rounded w-full" type="submit">Invia dati</button>
+                            <button className="p-2 bg-sky-500 rounded-md w-full" type="submit">Invia dati</button>
                         </div>
                     </form>
                 </div>
@@ -135,7 +148,15 @@ export default function FirstForm() {
                                     <div>{elem.email}</div>
                                     <div>{elem.genere}</div>
                                     <div>{elem.professione}</div>
-
+                                    <ul>Interessi:
+                                        {elem.interessi.map((int)=>{
+                                             return(
+                                            
+                                                <li> - {int}</li>
+                                            
+                                            )
+                                        })}
+                                    </ul>
                                 </div>
                             </div>
                         )
