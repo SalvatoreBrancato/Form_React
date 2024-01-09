@@ -11,7 +11,7 @@ export default function FirstForm() {
         genere: '',
         professione:'',
         interessi:[],
-        //immagine: '' 
+        immagine: 'https://picsum.photos/200/300' 
     })
 
     const [card, setCard] = useState([])
@@ -40,9 +40,25 @@ export default function FirstForm() {
           } else {
             setInterests([...interests, value]);
           }
-        //setInterests([...interests, value])
     }
 
+    //estazione file caricato senza db
+    
+        const [file, setFile] = useState(null);
+        const [image, setImage] = useState(null);
+      
+        const handleFileChange = (event) => {
+          setFile(event.target.files[0]);
+      
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            setImage(event.target.result);
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        };
+   
+    
+    
     const handleInputChange = (e) => {
         const { name, type, value, checked } = e.target
         const inputValue = type == 'checkbox' ? checked : value
@@ -64,7 +80,7 @@ export default function FirstForm() {
             genere: gender,
             professione: profession,
             interessi:interests,
-            //immagine: formData.immagine
+            immagine: image
         }
 
         setCard([...card, newCard])
@@ -125,34 +141,36 @@ export default function FirstForm() {
                             <label htmlFor="interesseDue">Romanzi</label>
                         </div>
                     </div>
-                    {/* <div className="flex justify-between mb-2 text-white">
+                    <div className="flex justify-between mb-2 text-white">
                         <label htmlFor="immagine">Immagine</label>
-                        <input className="basis-2/3" name="immagine" type="file" />
-                    </div>*/}
+                        <input className="basis-2/3" name="immagine" type="file" onChange={handleFileChange}/>
+                    </div>
                         <div className="flex w-full">
                             <button className="p-2 bg-sky-500 rounded-md w-full" type="submit">Invia dati</button>
                         </div>
                     </form>
                 </div>
-                <div>
+
+                {/* Card */}
+                <div className="flex justify-center items-start">
                     {card.map((elem) => {
                         return (
-                            <div key={elem.id} className="flex">
-                                <div>
-                                    {/* <img src="https://picsum.photos/200/300" alt="" /> */}
+                            <div key={elem.id} className="flex border xl border-black w-[40%]">
+                                <div className="w-[20%] mr-10">
+                                    <img className="w-full rounded-xl shadow-2xl" src={elem.immagine} alt="immagine profilo" />  
                                 </div>
                                 <div>
-                                    <h1>{elem.nome}</h1>
-                                    <h2>{elem.cognome}</h2>
-                                    <div>{elem.cell}</div>
-                                    <div>{elem.email}</div>
-                                    <div>{elem.genere}</div>
-                                    <div>{elem.professione}</div>
-                                    <ul>Interessi:
+                                    <h1>{elem.nome} {elem.cognome}</h1>
+                                    <div>Cell: {elem.cell}</div>
+                                    <div>Email: {elem.email}</div>
+                                    <div className="capitalize">{elem.genere}</div>
+                                    <div className="capitalize">Ruolo: {elem.professione}</div>
+                                    <div>Interessi:</div>
+                                    <ul className="flex">
                                         {elem.interessi.map((int)=>{
                                              return(
                                             
-                                                <li> - {int}</li>
+                                                <li className="mr-2 px-2 bg-green-500 rounded-xl">{int}</li>
                                             
                                             )
                                         })}
